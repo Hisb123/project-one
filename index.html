@@ -2,63 +2,65 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Speech Recognition</title>
+    <title>Speech-to-Mumble</title>
   </head>
   <body>
-    <h1>Speech Recognition</h1>
     <style>
-        body {
-          font-family: Arial, sans-serif;
-          background-color: #f5f5f5;
-          text-align: center;
-        }
-        h1 {
-          color: #333;
-        }
-        button {
-          padding: 10px 20px;
-          font-size: 16px;
-          background-color: #3498db;
-          border: none;
-          color: white;
-          cursor: pointer;
-          margin: 10px;
-        }
-        button:disabled {
-          background-color: #bdc3c7;
-          cursor: not-allowed;
-        }
-        button:hover {
-          background-color: #2980b9;
-        }
-        #result {
-          background-color: white;
-          padding: 10px;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          margin: 10px;
-        }
-        #greenBox {
-          width: 100px;
-          height: 100px;
-          background-color: transparent;
-          margin: 10px;
-        }
-        #redBackground {
-          margin: 10px;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background: rgb(246, 248, 255);
+        text-align: center;
+      }
 
-      </style>
+      h1 {
+        color: rgb(162, 0, 255);
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+        letter-spacing: -0.5px;
+        font-size: 400%;
+        margin: 20px;
+      }
+
+      button {
+        background-color: rgb(162, 0, 255);
+        color: white;
+        text-align: center;
+        width: 150px;
+        height: 50px;
+        border: 1px solid rgb(214, 214, 214);
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+        border-radius: 10px;
+        transition: background-color 0.3s;
+        margin: 10px;
+      }
+
+      button:disabled {
+        background-color: #bdc3c7;
+        cursor: not-allowed;
+      }
+
+      button:hover {
+        background-color: rgb(74, 36, 96);
+      }
+
+      #result {
+        background-color: white;
+        padding: 10px;
+        border: 1px solid  rgb(162, 0, 255);
+        border-radius: 5px;
+        margin: 10px;
+        font-size: 18px;
+        color: black;
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+
+      }
+
+    </style>
+    <h1>Speech-to-Mumble</h1>
     <button id="startRecording">Start Recording</button>
     <button id="stopRecording" disabled>Stop Recording</button>
     <div id="result">Listening...</div>
-    <div id="recordedSpeech"></div> 
-    <button id="speakButton">Speak</button>
-    <button id="Murmur1">Murmur1</button>
-    <button id="Murmur2">Murmur2</button>
-    <button id="Murmur3">Murmur3</button>
-    <button id="Murmur4">Murmur4</button>
-    
+    <div id="recordedSpeech"></div>
+    <button id="speakButton">Mumblefication</button>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
@@ -68,7 +70,6 @@
       let speechRec;
       let recording = false;
       let recordedSpeech = ""; // Variable to store recorded speech
-
 
       function setup() {
         noCanvas();
@@ -80,17 +81,26 @@
 
         speechRec.onResult = showResult;
 
-        document.getElementById("startRecording").addEventListener("click", startRecording);
-        document.getElementById("stopRecording").addEventListener("click", stopRecording);
+        document
+          .getElementById("startRecording")
+          .addEventListener("click", startRecording);
+        document
+          .getElementById("stopRecording")
+          .addEventListener("click", stopRecording);
 
         // p5.Speech
         speech = new p5.Speech();
-        speech.setLang('en-GB'); // Set to British English
+        speech.setLang("en-GB"); // Set to British English
         let speakButton = document.getElementById("speakButton");
         speakButton.addEventListener("click", speakRecordedSpeech);
-      
-
       }
+
+      const LETTER_DROP_RATE = 0.1;
+      const LETTER_DUPLICATION_RATE = 0.15;
+      const SMARTIFICATION_RATE = 0.1;
+      const CONTRACTION_FACTOR = 0.2;
+
+      let smarty_suffixes = ["ization", "ify", "ism", "ification", "ette", "phobia", "logy", "ality", "wise"];
 
       function startRecording() {
         if (!recording) {
@@ -110,6 +120,119 @@
         }
       }
 
+      function dropletters(speechstring) {
+      // randomly deletes some letters from the speech string
+      let out_string = "";
+      for (const char of speechstring) {
+        if (random(0, 1) > LETTER_DROP_RATE) {
+          out_string += char;
+        }
+      }
+      return out_string;
+      }
+
+      function addletters(speechstring) {
+        // randomly duplicates letters to the speech string
+        let out_string = "";
+        for (const char of speechstring) {
+          if (random(0, 1) > LETTER_DUPLICATION_RATE) {
+            out_string += char;
+          } else {
+            out_string += char + char;
+          }
+        }
+        return out_string;
+      }
+
+      function tokenize(speechstring) {
+        // takes a speech string and
+        return speechstring.split(' ');
+      }
+
+      function jumble(tokenarray) {
+        // randomly swaps some adjacent words in the speech string
+        jumbledarray = tokenarray;
+        return jumbledarray;
+      }
+
+      function replaceThWithD(wordArray) {
+        let modifiedArray = [];
+
+        for (const word of wordArray) {
+          let modifiedWord = word.replace(/th/g, 'd');
+          modifiedArray.push(modifiedWord);
+        }
+
+        return modifiedArray;
+      }
+
+      function thatgirl(wordArray) {
+        let processedArray = [];
+
+        const courtesy = ["Mr.", "Mrs.", "Dr.", "Ms.", "Miss", "Mx.", "Sir", "Madam", "Mister", "Professor", "Prof."];
+
+        for (const token of wordArray) {
+          if (courtesy.includes(token)) {
+            processedArray.push("that girl");
+          } else {
+            processedArray.push(token);
+          }
+        }
+
+        return processedArray;
+      }
+
+      function smartify(tokenarray) {
+        // adds smarty suffixes to random words
+        let out_array = [];
+        for (const token of tokenarray) {
+          if (random(0, 1) < SMARTIFICATION_RATE) {
+            out_array.push(token + randomSmarty());
+          } else {
+            out_array.push(token);
+          }
+        }
+        return out_array;
+      }
+
+      function stringify(tokenarray) {
+        // converts the token array into a string in a completely normal way
+        let result_string = "";
+        for (const token of tokenarray) {
+          result_string += token;
+          if (random(0, 1) > CONTRACTION_FACTOR) {
+            // puts a space between words, maybe.
+            result_string += ' ';
+          }
+        }
+        return result_string;
+      }
+
+      function mumblify(speechstring) {
+        // takes the speech string and runs it through the entire mumblification process
+        // first it drops some letters
+        let dropletter_string = dropletters(speechstring);
+
+        // then it duplicates some letters
+        let doubleletter_string = addletters(dropletter_string);
+        // then it tokenizes the string into an array
+        speechstring_tokens = tokenize(doubleletter_string);
+        // then it maybe does something else to make it even more cursed
+
+        // replaces th with d
+        let d_array = replaceThWithD(speechstring_tokens);
+
+        // girl.
+        let girl_array = thatgirl(d_array);
+        // then it adds the smary suffixes to some randomly selected tokens
+        smartified_tokens = smartify(girl_array);
+
+        // then it converts the whole cursed thing into a cursed string
+        let result_string = stringify(smartified_tokens);
+        return result_string;
+      }
+
+
       function showResult() {
         if (speechRec.resultValue) {
           const transcription = document.getElementById("result");
@@ -119,12 +242,10 @@
       }
 
       function speakRecordedSpeech() {
-        speech.speak(recordedSpeech);
+        speech.speak(mumblify(recordedSpeech));
       }
 
       // var recordedSpeech contains the recorded speech in string format
-
-
     </script>
   </body>
 </html>
