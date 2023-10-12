@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Speech Recognition</title>
+  </head>
+  <body>
+    <h1>Speech Recognition</h1>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f5f5f5;
+          text-align: center;
+        }
+        h1 {
+          color: #333;
+        }
+        button {
+          padding: 10px 20px;
+          font-size: 16px;
+          background-color: #3498db;
+          border: none;
+          color: white;
+          cursor: pointer;
+          margin: 10px;
+        }
+        button:disabled {
+          background-color: #bdc3c7;
+          cursor: not-allowed;
+        }
+        button:hover {
+          background-color: #2980b9;
+        }
+        #result {
+          background-color: white;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          margin: 10px;
+        }
+        #greenBox {
+          width: 100px;
+          height: 100px;
+          background-color: transparent;
+          margin: 10px;
+        }
+        #redBackground {
+          margin: 10px;
+        }
+
+      </style>
+    <button id="startRecording">Start Recording</button>
+    <button id="stopRecording" disabled>Stop Recording</button>
+    <div id="result">Listening...</div>
+    <div id="recordedSpeech"></div> 
+    <button id="speakButton">Speak</button>
+    <button id="Murmur1">Murmur1</button>
+    <button id="Murmur2">Murmur2</button>
+    <button id="Murmur3">Murmur3</button>
+    <button id="Murmur4">Murmur4</button>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.speech/1.0.2/p5.speech.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/IDMNYU/p5.js-speech@0.0.3/lib/p5.speech.js"></script>
+    <script>
+      let speechRec;
+      let recording = false;
+      let recordedSpeech = ""; // Variable to store recorded speech
+
+
+      function setup() {
+        noCanvas();
+
+        // p5.Record
+        speechRec = new p5.SpeechRec();
+        speechRec.continuous = true;
+        speechRec.interimResults = true;
+
+        speechRec.onResult = showResult;
+
+        document.getElementById("startRecording").addEventListener("click", startRecording);
+        document.getElementById("stopRecording").addEventListener("click", stopRecording);
+
+        // p5.Speech
+        speech = new p5.Speech();
+        speech.setLang('en-GB'); // Set to British English
+        let speakButton = document.getElementById("speakButton");
+        speakButton.addEventListener("click", speakRecordedSpeech);
+      
+
+      }
+
+      function startRecording() {
+        if (!recording) {
+          recording = true;
+          document.getElementById("startRecording").disabled = true;
+          document.getElementById("stopRecording").disabled = false;
+          speechRec.start();
+        }
+      }
+
+      function stopRecording() {
+        if (recording) {
+          recording = false;
+          document.getElementById("startRecording").disabled = false;
+          document.getElementById("stopRecording").disabled = true;
+          speechRec.stop();
+        }
+      }
+
+      function showResult() {
+        if (speechRec.resultValue) {
+          const transcription = document.getElementById("result");
+          result.innerHTML = speechRec.resultString;
+        }
+        recordedSpeech = speechRec.resultString; // Save recorded speech
+      }
+
+      function speakRecordedSpeech() {
+        speech.speak(recordedSpeech);
+      }
+
+      // var recordedSpeech contains the recorded speech in string format
+
+
+    </script>
+  </body>
+</html>
